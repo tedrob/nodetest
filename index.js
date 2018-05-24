@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 const { Client, Pool } = require('pg');
 const assert = require('assert');
 const promise = require('bluebird');
+const cors = require('cors');
 
 const initOptions = { 
   promiseLib: promise // overriding the default (ES6 Promise);
@@ -63,6 +64,7 @@ client.query('SELECT table_schema, table_name FROMinformation_schema.tables;',
   
 express()
   .use(express.static(path.join(__dirname, 'public')))
+  .use(cors())
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
