@@ -49,8 +49,11 @@ express()
       res.render('pages/db', result);
       cleint.release();
     } catch (err) {
+      assert.isNotOk(error, 'Promise error');
+      done();      
       console.error(err);
       res.send("Error " + err);
+      done();
     }
   })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
