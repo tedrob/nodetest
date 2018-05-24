@@ -3,6 +3,22 @@ const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
 const { Client, Pool } = require('pg');
+const pgp = require ('pg-promise')(/* options */);
+pgp.pg.defaults.ssl = true;
+
+const cn = {
+  connectionString: process.env.DATABASE_URL
+}
+
+const db = pgp('postgres://axwxwddyqhbity:64cec3027248eedfa68f8b572e08c17ccb666e6df3bb755769fb641c6baf0963@ec2-23-23-130-158.compute-1.amazonaws.com:5432/dcugu53beu8p4j');
+
+db.any('SELECT * FROM test_table')
+ .then((data) => {
+   console.log('Data', data);
+ })
+ .catch((error) => {
+   console.log('Error', error);
+ });
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
