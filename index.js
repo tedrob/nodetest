@@ -10,14 +10,14 @@ const initOptions = {
   promiseLib: promise // overriding the default (ES6 Promise);
 };
 const pgp = require('pg-promise')( initOptions );
-// pgp.pg.defaults.ssl = true;
+pgp.pg.defaults.ssl = true;
 
 const cn = {
   connectionString: process.env.DATABASE_URL
 }
 
-// const db = pgp('postgres://axwxwddyqhbity:64cec3027248eedfa68f8b572e08c17ccb666e6df3bb755769fb641c6baf0963@ec2-23-23-130-158.compute-1.amazonaws.com:5432/dcugu53beu8p4j');
-const db = pgp(cn);
+const db = pgp('postgres://axwxwddyqhbity:64cec3027248eedfa68f8b572e08c17ccb666e6df3bb755769fb641c6baf0963@ec2-23-23-130-158.compute-1.amazonaws.com:5432/dcugu53beu8p4j');
+// const db = pgp(cn);
 
 db.any('SELECT * FROM test_table')
  .then((data) => {
