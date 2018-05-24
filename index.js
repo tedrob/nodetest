@@ -39,7 +39,7 @@ express()
   })
   .get('/db', async (req, res) => {
     try {
-      const client = await SVGPolygonElement.connect();
+      const client = await pool.connect();
       const result = await client.query('SELECT * FROM test_table');
       res.render('pages/db', result);
       cleint.release();
