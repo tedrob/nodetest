@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 const { Client, Pool } = require('pg');
 const pgp = require ('pg-promise')(/* options */);
 pgp.pg.defaults.ssl = true;
+const assert = require('assert');
 
 const cn = {
   connectionString: process.env.DATABASE_URL
