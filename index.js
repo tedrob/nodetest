@@ -3,15 +3,21 @@ const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
 const { Client, Pool } = require('pg');
-const pgp = require ('pg-promise')(/* options */);
-pgp.pg.defaults.ssl = true;
 const assert = require('assert');
+const promise = require('bluebird');
+
+const initOptions = { 
+  promiseLib: promise // overriding the default (ES6 Promise);
+};
+const pgp = require('pg-promise')( initOptions );
+// pgp.pg.defaults.ssl = true;
 
 const cn = {
   connectionString: process.env.DATABASE_URL
 }
 
-const db = pgp('postgres://axwxwddyqhbity:64cec3027248eedfa68f8b572e08c17ccb666e6df3bb755769fb641c6baf0963@ec2-23-23-130-158.compute-1.amazonaws.com:5432/dcugu53beu8p4j');
+// const db = pgp('postgres://axwxwddyqhbity:64cec3027248eedfa68f8b572e08c17ccb666e6df3bb755769fb641c6baf0963@ec2-23-23-130-158.compute-1.amazonaws.com:5432/dcugu53beu8p4j');
+const db = pgp(cn);
 
 db.any('SELECT * FROM test_table')
  .then((data) => {
@@ -21,9 +27,9 @@ db.any('SELECT * FROM test_table')
    console.log('Error', error);
  });
 
-/* const client = new Client({
+ const client = pgp({ //  new Client.pg({
   connectionString: process.env.DATABASE_URL,
-  ssl: true,
+  ssl: false,
 });
 
 const pool = new Pool({
@@ -31,8 +37,8 @@ const pool = new Pool({
   ssl: true
 });
 
-client.connect();
-
+// client.connect();
+/*
 client.query('SELECT table_schema, table_name FROMinformation_schema.tables;',
   (err, res)  =>{
     if (err) { 
@@ -45,6 +51,16 @@ client.query('SELECT table_schema, table_name FROMinformation_schema.tables;',
     client.end();
   }); */
 
+/* db.any('SELECT table_schema, table_name FROM information_schema.tables')
+  .then((data) => {
+    console.log('Data', data);
+  })
+  .catch((error) => {
+    console.log('Error', error);
+  }); */
+
+
+  
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
@@ -73,4 +89,15 @@ express()
       done();
     }
   }) */
+  .get('/db', (req, res) => {
+    db.any('SELECT * FROM test_table')
+      .then((data) => {
+        const result = data.value;
+        res.render('pages/db', result);
+      })
+      .catch((err) => {
+        console.error('Error ' + err);
+        res.send('Error ' + err);
+      })
+  })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
