@@ -21,7 +21,7 @@ db.any('SELECT * FROM test_table')
    console.log('Error', error);
  });
 
-const client = new Client({
+/* const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 });
@@ -43,7 +43,7 @@ client.query('SELECT table_schema, table_name FROMinformation_schema.tables;',
       console.log(JSON.stringify(row));
     }
     client.end();
-  });
+  }); */
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
@@ -59,7 +59,7 @@ express()
     }
     res.send(result);
   })
-  .get('/db', async (req, res) => {
+  /* .get('/db', async (req, res) => {
     try {
       const client = await pool.connect();
       const result = await client.query('SELECT * FROM test_table');
@@ -72,5 +72,5 @@ express()
       res.send("Error " + err);
       done();
     }
-  })
+  }) */
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
