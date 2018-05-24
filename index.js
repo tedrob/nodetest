@@ -9,6 +9,11 @@ const client = new Client({
   ssl: true,
 });
 
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
+});
+
 client.connect();
 
 client.query('SELECT table_schema, table_name FROMinformation_schema.tables;',
